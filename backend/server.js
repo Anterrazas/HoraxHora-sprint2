@@ -25,14 +25,21 @@ db.connect(err => {
 // Registrar unidad
 app.post('/unidades', (req, res) => {
     const { tipo } = req.body;
-    db.query('INSERT INTO unidades (tipo) VALUES (?)', [tipo], (err) => {
-        if (err) return res.status(500).send(err);
-        res.send({ message: 'Unidad registrada' });
-    });
-});
 
-app.get('/', (req, res) => {
-    res.send("API HoraxHora funcionando correctamente");
+    // VALIDACIÓN NUEVA
+    if (!tipo || (tipo !== 'BUENA' && tipo !== 'MALA')) {
+        return res.status(400).send({ mensaje: "Tipo inválido. Usa BUENA o MALA" });
+    }
+
+    db.query(
+        'INSERT INTO unidades (tipo) VALUES (?)',
+        [tipo],
+        (err) => {
+            if (err) return res.status(500).send(err);
+
+            res.send({ message: 'Unidad registrada correctamente' });
+        }
+    );
 });
 
 // Obtener conteo
