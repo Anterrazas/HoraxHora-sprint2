@@ -55,6 +55,17 @@ app.get('/conteo', (req, res) => {
     });
 });
 
+// Obtener historial
+app.get('/historial', (req, res) => {
+    db.query(
+        "SELECT id, tipo, NOW() as fecha FROM unidades ORDER BY id DESC LIMIT 10",
+        (err, results) => {
+            if (err) return res.status(500).send(err);
+            res.send(results);
+        }
+    );
+});
+
 app.listen(3000, () => {
     console.log("Servidor en puerto 3000");
 });
