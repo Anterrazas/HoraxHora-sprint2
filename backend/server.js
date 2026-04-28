@@ -66,6 +66,23 @@ app.get('/historial', (req, res) => {
     );
 });
 
+// Historial por rango de fechas
+app.get('/historial-fechas', (req, res) => {
+    const { inicio, fin } = req.query;
+
+    db.query(
+        `SELECT id, tipo, NOW() as fecha 
+         FROM unidades 
+         WHERE DATE(NOW()) BETWEEN ? AND ?
+         ORDER BY id DESC`,
+        [inicio, fin],
+        (err, results) => {
+            if (err) return res.status(500).send(err);
+            res.send(results);
+        }
+    );
+});
+
 app.listen(3000, () => {
     console.log("Servidor en puerto 3000");
 });
